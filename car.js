@@ -39,7 +39,7 @@ class Car {
         this.controls.forward = outputs[0]
         this.controls.left = outputs[1]
         this.controls.right = outputs[2]
-        this.controls.revers = outputs[3]
+        this.controls.reverse = outputs[3]
       }
     }
   }
@@ -127,7 +127,7 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx, color) {
+  draw(ctx, color, drawSensor = false) {
     if (this.damaged) {
       ctx.fillStyle = "red";
     } else {
@@ -140,7 +140,7 @@ class Car {
     }
     ctx.fill();
 
-    if (this.sensor) {
+    if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }
   }
