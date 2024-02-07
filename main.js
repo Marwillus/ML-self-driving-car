@@ -8,24 +8,34 @@ const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 // const car = new Car(road.getLaneCenter(1), 100, 30, 50, "CONTROL");
-// const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
-const cars = generateCars(100);
-let bestCar;
+const NUMBER_CARS= 100
+const MUTATION_LEVEL=0.1
+
+const cars = generateCars(NUMBER_CARS);
+let bestCar = cars[0];
 
 if (localStorage.getItem("bestBrain")) {
-  bestCar.brain = JSON.parse(localStorage.getItem("bestBrain"));
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+    if (i != 0) {
+      NeuralNetwork.mutate(cars[i].brain, MUTATION_LEVEL);
+    }
+  }
 }
 
 const traffic = [
   new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
   new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2),
   new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(0), -500, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(1), -500, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(2), -700, 30, 50, "DUMMY", 2),
 ];
 
 animate();
 
 function save() {
-  localStorage.setItem("bestCar", JSON.stringify(bestCar.brain));
+  localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
 }
 
 function discard() {
